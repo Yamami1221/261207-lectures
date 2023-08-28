@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Random User</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"
+      integrity="sha512-odNmoc1XJy5x1TMVMdC7EMs3IVdItLPlCeL5vSUPN2llYKMJ2eByTTAIiiuqLg+GdNr9hF6z81p27DArRFKT7A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body class="bg-secondary">
+    <div style="width: 700px" class="mx-auto">
+      <!-- app header -->
+      <p class="text-center display-4 m-4 fst-italic text-white fw-bold">
+        Profile Generator
+        <span id="span-gender-icon" class="fst-normal">👨👩</span>
+      </p>
+
+      <!-- user card -->
+      <div id="div-user-card" class="border rounded-3 p-3 bg-light">
+        <img id="img-profile" class="rounded-circle d-block mx-auto" />
+        <p id="p-name" class="text-center display-3 placeholder-glow"></p>
+        <p id="p-email" class="text-center fs-5"></p>
+        <p id="p-address" class="text-center fs-6"></p>
+        <button id="btn-random" class="btn btn-primary mx-auto d-block">
+          Generate more ..
+        </button>
+      </div>
+
+      <!-- loading card -->
+      <div id="div-loading-card" class="border rounded-3 p-3 bg-light">
+        <p class="fst-italic text-center display-6">Loading Profile..</p>
+      </div>
+
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
