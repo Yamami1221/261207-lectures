@@ -1,6 +1,6 @@
 "use client";
 import { runningPlans } from "@/libs/runningPlans";
-import { Button, Checkbox, Container, Group, Select, TextInput, Title, Text, Anchor, Modal } from "@mantine/core";
+import { Button, Checkbox, Container, Group, Select, TextInput, Title, Text, Anchor, Modal, Radio } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
 export default function Home() {
@@ -15,6 +15,11 @@ export default function Home() {
         <TextInput label="First Name" required />
         <TextInput label="Last Name" required />
       </Group>
+      
+      <Radio.Group name="gender" label="Please choose your gender" withAsterisk>
+        <Radio value="Male" label="Male" />
+        <Radio value="Female" label="Female" />
+      </Radio.Group>
 
       <Select data={runningPlans} label="Plan" placeholder="Select Running Plan" required searchable />
 
