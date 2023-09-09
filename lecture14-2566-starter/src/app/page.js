@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <Container size="xs">
       <Title color="Pink">
-        Register CMU Marathon
+        Register CMU Marathon 2021
       </Title>
 
       <Group grow>
