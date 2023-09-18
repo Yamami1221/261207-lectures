@@ -6,7 +6,7 @@ export const MantineWrapper = ({ children }) => {
     <MantineProvider
       withGlobalStyles
       withNormalizeCSS
-      theme={{ primaryColor: "violet" }}
+      theme={{ primaryColor: "yellow" }}
     >
       {children}
     </MantineProvider>

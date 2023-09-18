@@ -11,6 +11,7 @@ import {
   Title,
 } from "@mantine/core";
 import axios from "axios";
+import { set } from "lodash";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -26,12 +27,15 @@ export default function Home() {
   const [myCourses, setMyCourses] = useState(null);
 
   const loadCourses = async () => {
-    const resp = await axios.get("");
+    setLoadingCourses(true);
+    const resp = await axios.get("/api/course");
+    setCourses(resp.data.courses);
+    setLoadingCourses(false);
   };
 
   const loadMyCourses = async () => {
     const resp = await axios.get("/api/enrollment", {
-      // headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${token}` },
     });
     setMyCourses(resp.data.courses);
   };
@@ -50,12 +54,12 @@ export default function Home() {
 
   const login = async () => {
     try {
-      const resp = await axios.post("/api/user/login");
+      const resp = await axios.post("/api/user/login", { username, password });
       //set token and authenUsername here
-      // setToken();
-      // setAuthenUsername();
-      // setUsername("");
-      // setPassword("");
+      setToken(resp.data.token);
+      setAuthenUsername(resp.data.username);
+      setUsername("");
+      setPassword("");
     } catch (error) {
       //show error message from API
       if (error.response.data) {
@@ -68,7 +72,10 @@ export default function Home() {
   };
 
   const logout = () => {
-    //set stuffs to null
+    //clear token and authenUsername here
+    setToken(null);
+    setAuthenUsername(null);
+    setMyCourses(null);
   };
 
   return (
@@ -80,7 +87,7 @@ export default function Home() {
         {/* all courses section */}
         <Paper withBorder p="md">
           <Title order={4}>All courses</Title>
-          {/* <Loader variant="dots" /> */}
+          {loadingCourses && <Loader variant="dots" />}
           {courses &&
             courses.map((course) => (
               <Text key={course.courseNo}>
@@ -94,7 +101,7 @@ export default function Home() {
           <Title order={4}>Login</Title>
 
           {/* show this if not logged in yet */}
-          <Group align="flex-end">
+          {!authenUsername && <Group align="flex-end">
             <TextInput
               label="Username"
               onChange={(e) => setUsername(e.target.value)}
@@ -106,21 +113,21 @@ export default function Home() {
               value={password}
             />
             <Button onClick={login}>Login</Button>
-          </Group>
+          </Group>}
 
           {/* show this if logged in already */}
-          {/* <Group>
-              <Text fw="bold">Hi {authenUsername}!</Text>
-              <Button color="red" onClick={logout}>
-                Logout
-              </Button>
-            </Group> */}
+          {authenUsername && <Group>
+            <Text fw="bold">Hi {authenUsername}!</Text>
+            <Button color="red" onClick={logout}>
+              Logout
+            </Button>
+          </Group>}
         </Paper>
 
         {/* enrollment section */}
         <Paper withBorder p="md">
           <Title order={4}>My courses</Title>
-          <Text color="dimmed">Please login to see your course(s)</Text>
+          {!authenUsername && <Text color="dimmed">Please login to see your course(s)</Text>}
 
           {myCourses &&
             myCourses.map((course) => (
