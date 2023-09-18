@@ -43,9 +43,16 @@ export default function Home() {
   //load courses when app started
   useEffect(() => {
     loadCourses();
+
+    //load token and username from local storage
+    const token = localStorage.getItem("token");
+    const username = localStorage.getItem("username");
+    if (token) setToken(token);
+    if (username) setAuthenUsername(username);
   }, []);
 
   //load my courses when logged in
+  //this also run when token changed
   useEffect(() => {
     if (!token) return;
 
@@ -60,6 +67,8 @@ export default function Home() {
       setAuthenUsername(resp.data.username);
       setUsername("");
       setPassword("");
+      localStorage.setItem("token", resp.data.token);
+      localStorage.setItem("username", resp.data.username);
     } catch (error) {
       //show error message from API
       if (error.response.data) {
@@ -76,6 +85,8 @@ export default function Home() {
     setToken(null);
     setAuthenUsername(null);
     setMyCourses(null);
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
   };
 
   return (
