@@ -11,51 +11,55 @@ datasource db {
 }
 
 model Course {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  courseNo String   @unique
-  title    String   @unique
+  courseNo    String       @unique
+  title       String       @unique
+  enrollments Enrollment[]
 
   @@map("courses")
 }
 
 model Student {
-    id        String  @id @default(auto()) @map("_id") @db.ObjectId
-    studentId String  @unique
-    firstName String
-    lastName  String
-    program   Program
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  studentId   String       @unique
+  firstName   String
+  lastName    String
+  program     Program
+  enrollments Enrollment[]
 
-    @@map("students")
+  @@map("students")
 }
 
 enum Program {
-    CPE
-    ISNE
+  CPE
+  ISNE
 }
 
 model Enrollment {
-    id String @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-    courseNo  String
-    studentId String
+  courseNo  String
+  studentId String
+  course    Course  @relation(fields: [courseNo], references: [courseNo])
+  student   Student @relation(fields: [studentId], references: [studentId])
 
-    @@unique([courseNo, studentId])
-    @@map("enrollments")
+  @@unique([courseNo, studentId])
+  @@map("enrollments")
 }
 
 model User {
-    id String @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-    username  String  @unique
-    password  String
-    studentId String?
-    role      Role
+  username  String  @unique
+  password  String
+  studentId String?
+  role      Role
 
-    @@map("users")
+  @@map("users")
 }
 
 enum Role {
-    STUDENT
-    ADMIN
+  STUDENT
+  ADMIN
 }

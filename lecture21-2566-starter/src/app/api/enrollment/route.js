@@ -26,7 +26,14 @@ export const GET = async (request) => {
   }
 
   const prisma = getPrisma();
-  const enrollments = null;
+  const enrollments = await prisma.enrollment.findMany({
+    where: {
+      studentId,
+    },
+    include: {
+      course: true,
+    },
+  });
 
   return NextResponse.json({
     ok: true,
@@ -71,6 +78,14 @@ export const POST = async (request) => {
   }
 
   //will be coded in lab!
+  const prisma = getPrisma();
+  //perform insertion here
+  const newEnrollment = await prisma.enrollment.create({
+    data: {
+      studentId,
+      courseNo,
+    },
+  });
 
   return NextResponse.json({
     ok: true,
