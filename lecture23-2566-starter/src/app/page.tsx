@@ -1,6 +1,8 @@
 "use client";
 
 import { PokemonCard } from "@/components/PokemonCard";
+import { Pokemon } from "@/types/Pokemon";
+import { PokemonApiResult } from "@/types/PokemonApiResult";
 import {
   Button,
   Container,
@@ -15,20 +17,26 @@ import { useState } from "react";
 
 export default function Home() {
   const [searchText, setSearchText] = useState("");
-  const [pokemon, setPokemon] = useState(null);
+  const [pokemon, setPokemon] = useState<Pokemon | null>(null);
   const [loadingPokemon, setLoadingPokemon] = useState(false);
 
   const callLoadPokemon = async () => {
     setLoadingPokemon(true);
     setPokemon(null);
     try {
-      const resp = await axios.get(
+      const resp = await axios.get<PokemonApiResult>(
         `https://pokeapi.co/api/v2/pokemon/${searchText}`
       );
-      const result = resp.data;
-      const computedResult = {};
+      const result: PokemonApiResult = resp.data;
+      const computedResult: Pokemon = {
+        name: result.name,
+        height: result.height,
+        weight: result.weight,
+        imageUrl: result.sprites.other["official-artwork"].front_default,
+        types: result.types.map((type) => type.type.name),
+      };
 
-      // setPokemon(computedResult);
+      setPokemon(computedResult);
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response?.status === 404) alert("Cannot find any pokemon");
@@ -51,6 +59,8 @@ export default function Home() {
             <TextInput
               placeholder="Search with name or Pokédex number"
               w="100%"
+              onChange={(e) => setSearchText(e.currentTarget.value)}
+              value={searchText}
             />
             <Button type="submit" disabled={loadingPokemon}>
               Search
@@ -58,6 +68,7 @@ export default function Home() {
           </Group>
         </form>
         {loadingPokemon && <Loader type="bars" mx="auto" size="xl" />}
+        {!loadingPokemon && pokemon && <PokemonCard {...pokemon} />}
       </Stack>
     </Container>
   );
